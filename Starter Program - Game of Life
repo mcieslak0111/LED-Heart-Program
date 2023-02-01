@@ -1,5 +1,6 @@
 //TinyLife5
 //Conway's Game of Life runing on 5-pin charlieplexed LED grid (20 LEDs) on ATTiny85
+//Compile this progrmam in the Arduino IDE
 
 #include <avr/io.h>
 #include <util/delay.h>
