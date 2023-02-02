@@ -27,58 +27,71 @@ char led_grid[20] = {
   000 , 000 , 000 , 000 , 000 ,
   000 , 000 , 000 , 000 , 000
 };
-//DDRB direction config for each LED (1 = output)
+
+/* Port configuration for each LED. (1 = output)
+ * LEDs are indexed from 0-19, but are referenced in the program
+ * from 1-20. This conversion happens in the set_led() function
+ */
 const char led_dir[20] = {
-  ( 1<<LINE_A | 1<<LINE_E ), //LED 0
-  ( 1<<LINE_B | 1<<LINE_E ), //LED 1
-  ( 1<<LINE_C | 1<<LINE_E ), //LED 2
-  ( 1<<LINE_D | 1<<LINE_E ), //LED 3
-  ( 1<<LINE_E | 1<<LINE_D ), //LED 4
-  
-  ( 1<<LINE_A | 1<<LINE_D ), //LED 5
+  // column 1
+  ( 1<<LINE_A | 1<<LINE_E ), //LED 1
+  ( 1<<LINE_A | 1<<LINE_D ), //LED 2
+  ( 1<<LINE_A | 1<<LINE_C ), //LED 3
+  ( 1<<LINE_A | 1<<LINE_B ), //LED 4
+
+  // column 2
+  ( 1<<LINE_B | 1<<LINE_E ), //LED 5
   ( 1<<LINE_B | 1<<LINE_D ), //LED 6
-  ( 1<<LINE_C | 1<<LINE_D ), //LED 7
-  ( 1<<LINE_D | 1<<LINE_C ), //LED 8
-  ( 1<<LINE_E | 1<<LINE_C ), //LED 9
-  
-  ( 1<<LINE_A | 1<<LINE_C ), //LED 10
-  ( 1<<LINE_B | 1<<LINE_C ), //LED 11
-  ( 1<<LINE_C | 1<<LINE_B ), //LED 12
-  ( 1<<LINE_D | 1<<LINE_B ), //LED 13
-  ( 1<<LINE_E | 1<<LINE_B ), //LED 14
-  
-  ( 1<<LINE_A | 1<<LINE_B ), //LED 15
-  ( 1<<LINE_B | 1<<LINE_A ), //LED 16
-  ( 1<<LINE_C | 1<<LINE_A ), //LED 17
-  ( 1<<LINE_D | 1<<LINE_A ), //LED 18
-  ( 1<<LINE_E | 1<<LINE_A ) //LED 19
+  ( 1<<LINE_B | 1<<LINE_C ), //LED 7
+  ( 1<<LINE_B | 1<<LINE_A ), //LED 8
+
+  // column 3
+  ( 1<<LINE_C | 1<<LINE_E ), //LED 9
+  ( 1<<LINE_C | 1<<LINE_D ), //LED 10
+  ( 1<<LINE_C | 1<<LINE_B ), //LED 11
+  ( 1<<LINE_C | 1<<LINE_A ), //LED 12
+
+  // column 4
+  ( 1<<LINE_D | 1<<LINE_E ), //LED 13
+  ( 1<<LINE_D | 1<<LINE_C ), //LED 14
+  ( 1<<LINE_D | 1<<LINE_B ), //LED 15
+  ( 1<<LINE_D | 1<<LINE_A ), //LED 16
+
+  // column 5
+  ( 1<<LINE_E | 1<<LINE_D ), //LED 17
+  ( 1<<LINE_E | 1<<LINE_C ), //LED 18
+  ( 1<<LINE_E | 1<<LINE_B ),  //LED 19
+  ( 1<<LINE_E | 1<<LINE_A )  //LED 20
 };
 
-//PORTB output config for each LED (1 = High, 0 = Low)
+// PORTB output config for each LED (1 = High, 0 = Low)
+// Lines set to outputs will be either low or high per this table, all other lines are 
+// assumed to be high-z
 const char led_out[20] = {
-  ( 1<<LINE_A ), //LED 0
-  ( 1<<LINE_B ), //LED 1
-  ( 1<<LINE_C ), //LED 2
-  ( 1<<LINE_D ), //LED 3
-  ( 1<<LINE_E ), //LED 4
+  ( 1<<LINE_A ), //LED 1
+  ( 1<<LINE_A ), //LED 2
+  ( 1<<LINE_A ), //LED 3
+  ( 1<<LINE_A ), //LED 4
   
-  ( 1<<LINE_A ), //LED 5
+  ( 1<<LINE_B ), //LED 5
   ( 1<<LINE_B ), //LED 6
-  ( 1<<LINE_C ), //LED 7
-  ( 1<<LINE_D ), //LED 8
-  ( 1<<LINE_E ), //LED 9
+  ( 1<<LINE_B ), //LED 7
+  ( 1<<LINE_B ), //LED 8
   
-  ( 1<<LINE_A ), //LED 10
-  ( 1<<LINE_B ), //LED 11
+  ( 1<<LINE_C ), //LED 9
+  ( 1<<LINE_C ), //LED 10
+  ( 1<<LINE_C ), //LED 11
   ( 1<<LINE_C ), //LED 12
-  ( 1<<LINE_D ), //LED 13
-  ( 1<<LINE_E ), //LED 14
   
-  ( 1<<LINE_A ), //LED 15
-  ( 1<<LINE_B ), //LED 16
-  ( 1<<LINE_C ), //LED 17
-  ( 1<<LINE_D ), //LED 18
-  ( 1<<LINE_E ) //LED 19
+  ( 1<<LINE_D ), //LED 13
+  ( 1<<LINE_D ), //LED 14
+  ( 1<<LINE_D ), //LED 15
+  ( 1<<LINE_D ), //LED 16
+  
+  ( 1<<LINE_E ), //LED 17
+  ( 1<<LINE_E ), //LED 18
+  ( 1<<LINE_E ), //LED 19
+  ( 1<<LINE_E ) //LED 20
 };
 
 
