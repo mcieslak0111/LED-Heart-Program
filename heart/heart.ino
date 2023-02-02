@@ -18,6 +18,9 @@
 #define LINE_D 3 //Pin 2 (PB3) on ATtiny85
 #define LINE_E 4 //Pin 3 (PB4) on ATtiny85
 
+// For now, 8 brightness steps
+#define MAX_BRIGHTNESS 8
+
 char led_grid[20] = {
   000 , 000 , 000 , 000 , 000 ,
   000 , 000 , 000 , 000 , 000 ,
@@ -109,16 +112,16 @@ void heart_pattern(void)
   
   if(head == 0) // start animation with LED 1
   {
-    set_led(head, 25);
+    set_led(head, MAX_BRIGHTNESS/4);
     head = 1;
   }
   
-  else if (head >= 14) // somewhere around here, fade outp
+  else if (head >= 14) // somewhere around here, fade out. TODO this doesn't actually fade, its just shutting off
   {
     uint8_t i; 
     for(i = 0; i < 19; i++)
     {
-    set_led(i+1, 0);
+     set_led(i+1, 0);
     }
   }
   
@@ -126,29 +129,29 @@ void heart_pattern(void)
   {
     head ++; 
     body = head;
-    intensity = 25;
+    intensity = MAX_BRIGHTNESS/4;
     
     while(body > 0)
     {
       if(body <= 11) set_led(body, intensity); // the two sides meet at D11
       
       body --; 
-      if(intensity < 100) 
+      if(intensity < MAX_BRIGHTNESS) 
       {
-        intensity += 25;
+        intensity += MAX_BRIGHTNESS/4;
       }
     }
     
     body = 22-head; 
-    intensity = 25; 
+    intensity = MAX_BRIGHTNESS; 
     while(body < 21)
     {
       if(body <=12) set_led(body, intensity); // this side will stop at D12
       
       body ++;
-      if(intensity < 100)
+      if(intensity < MAX_BRIGHTNESS)
       {
-        intensity += 25;
+        intensity += MAX_BRIGHTNESS/4;
       }
     }
     
@@ -157,7 +160,7 @@ void heart_pattern(void)
 
 void set_led(uint8_t led, uint8_t intensity)
 {
-  intensity = intensity < 100 ? intensity : 100; // clamp the value to max 100
+  intensity = intensity < 100 ? intensity : MAX_BRIGHTNESS; // clamp the value to MAX_BRIGHTNESS
   
   led_grid[led -1] = intensity;
 }
@@ -193,7 +196,7 @@ void draw_frame(void)
   }
   
   // Keep track of the PWM waveform
-  if(period_track >= 100)
+  if(period_track >= MAX_BRIGHTNESS)
   {
     period_track = 0;
   }
