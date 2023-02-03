@@ -4,8 +4,8 @@
  *
  * Uses charlieplexed scheme to drive 20 LEDs
  * 
- * Note: Gettting blinks on LED 20 and LED 13 lighting dimmly before it should be on
- *
+ * Note: Mostly Fixed LED 20 blinking
+ * 
  * Created 2 Feb 2023 
  * Michael Cieslak, Zach Martin
  */
@@ -52,7 +52,7 @@ void led_sequential(void){
     for ( led=0; led<=19; led++ ) { led_grid_next[led] = 100; }
     fade_to_next_frame();
     // keeps the current state on for a bit
-    for( f=0 ; f<1500 ; f++ ){
+    for( f=0 ; f<1000 ; f++ ){
       draw_frame();
     }
     
@@ -61,7 +61,7 @@ void led_sequential(void){
     fade_to_next_frame();
     
     // keeps the current state on for a bit
-    for( f=0 ; f<1000 ; f++ ){
+    for( f=0 ; f<500 ; f++ ){
       draw_frame();
     }
 
@@ -97,8 +97,9 @@ void led_sequential(void){
 
 
 void initial_config(void){
-  for(int i=0; i<20; i++){
-    led_grid_next[i] = 0;
+  int i;
+  for(i=0; i<20; i++){
+    led_grid_next[i] = 000;
   }
   return;
 }
@@ -106,9 +107,9 @@ void initial_config(void){
 // Generate next LED
 void generate_next_led(void){
  
-  int second_side = 19;
-  for(int i=1; i<11; i++){
-    if(led_grid[i] == 0){
+  int i, second_side = 19;
+  for(i=1; i<11; i++){
+    if(led_grid[i] == 000){
       led_grid_next[i] = 100;
       led_grid_next[second_side] = 100;
       return;
@@ -184,12 +185,43 @@ const char led_out[20] = {
   ( 1<<LINE_E ), //LED 16
   ( 1<<LINE_E ), //LED 17
   ( 1<<LINE_E ), //LED 18
-  ( 1<<LINE_E ) //LED 19
+  ( 1<<LINE_E )  //LED 19
+};
+
+const char led_out_stop[20] = {
+  ( 0<<LINE_A ), //LED 0
+  ( 0<<LINE_A ), //LED 1
+  ( 0<<LINE_A ), //LED 2
+  ( 0<<LINE_A ), //LED 3
+  
+  ( 0<<LINE_B ), //LED 4
+  ( 0<<LINE_B ), //LED 5
+  ( 0<<LINE_B ), //LED 6
+  ( 0<<LINE_B ), //LED 7
+  
+  ( 0<<LINE_C ), //LED 8
+  ( 0<<LINE_C ), //LED 9
+  ( 0<<LINE_C ), //LED 10
+  ( 0<<LINE_C ), //LED 11
+  
+  ( 0<<LINE_D ), //LED 12
+  ( 0<<LINE_D ), //LED 13
+  ( 0<<LINE_D ), //LED 14
+  ( 0<<LINE_D ), //LED 15
+  
+  ( 0<<LINE_E ), //LED 16
+  ( 0<<LINE_E ), //LED 17
+  ( 0<<LINE_E ), //LED 18
+  ( 0<<LINE_E )  //LED 19
 };
 
 void light_led(char led_num) { //led_num must be from 0 to 19
   DDRB = led_dir[led_num];
   PORTB = led_out[led_num];
+}
+
+void off_led(char led_num){
+  PORTB = led_out_stop[led_num];
 }
 
 void leds_off() {
@@ -203,6 +235,7 @@ void draw_frame(void){
     //software PWM
     bright_val = led_grid[led];
     for( b=0 ; b < bright_val ; b+=4 ) { light_led(led); } //delay while on
+    off_led(led);
     for( b=bright_val ; b<100 ; b+=4 ) { leds_off(); } //delay while off
   }
 }
