@@ -4,6 +4,8 @@
  *
  * Uses charlieplexed scheme to drive 20 LEDs
  * 
+ * Compile this program in the Arduino IDE
+ * 
  * Created 27 Feb 2023 
  * Michael Cieslak, Zach Martin
  */
